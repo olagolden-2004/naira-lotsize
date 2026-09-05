@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Naira Lot Size Calculator</title>
+  <meta name="theme-color" content="#071312">
+  <title>NairaLotSize — Naira Forex Lot Size Calculator</title>
 
   <style>
     * {
@@ -12,51 +13,60 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: #071312;
-      color: white;
-      padding: 20px;
+      color: #ffffff;
+      padding: 18px;
     }
 
     .container {
-      max-width: 500px;
-      margin: auto;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
     }
 
-    h1 {
+    .header {
       text-align: center;
+      margin: 10px 0 22px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
       margin-bottom: 8px;
     }
 
     .subtitle {
-      text-align: center;
-      color: #9fb5b2;
-      margin-bottom: 25px;
+      color: #9eb4b0;
+      font-size: 14px;
+      line-height: 1.5;
     }
 
     .card {
       background: #0d1f1d;
       border: 1px solid #1d3935;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
     }
 
     label {
       display: block;
-      margin-top: 15px;
-      margin-bottom: 7px;
+      margin: 15px 0 7px;
+      color: #dce9e7;
       font-size: 14px;
-      color: #d7e5e3;
+      font-weight: 600;
     }
 
     input,
     select {
       width: 100%;
-      padding: 13px;
-      border-radius: 9px;
+      height: 48px;
+      padding: 0 13px;
       border: 1px solid #31514c;
+      border-radius: 10px;
       background: #071312;
-      color: white;
+      color: #ffffff;
       font-size: 16px;
       outline: none;
     }
@@ -67,18 +77,19 @@
     }
 
     .direction {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
     .direction button {
-      flex: 1;
-      padding: 13px;
-      border-radius: 9px;
+      height: 48px;
+      border-radius: 10px;
       border: 1px solid #31514c;
       background: #071312;
-      color: white;
-      font-weight: bold;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -90,418 +101,612 @@
 
     .calculate {
       width: 100%;
-      margin-top: 25px;
-      padding: 15px;
-      border: none;
-      border-radius: 10px;
+      margin-top: 24px;
+      height: 52px;
+      border: 0;
+      border-radius: 11px;
       background: #21c7a8;
       color: #06110f;
-      font-size: 17px;
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: 800;
       cursor: pointer;
     }
 
     .calculate:active {
-      transform: scale(0.98);
+      transform: scale(0.99);
+    }
+
+    .error {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 80, 80, 0.08);
+      border: 1px solid rgba(255, 100, 100, 0.25);
+      color: #ff9c9c;
+      font-size: 14px;
+      line-height: 1.45;
     }
 
     .result {
+      display: none;
       margin-top: 20px;
       padding: 18px;
+      border-radius: 14px;
       background: #071312;
-      border-radius: 12px;
       border: 1px solid #1d3935;
-      display: none;
     }
 
-    .result h2 {
-      margin-top: 0;
+    .result-title {
+      margin: 0;
       text-align: center;
+      font-size: 18px;
+    }
+
+    .lot-size {
+      margin: 14px 0 18px;
+      text-align: center;
+      font-size: 34px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #21c7a8;
     }
 
     .result-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
+      gap: 15px;
+      padding: 11px 0;
       border-bottom: 1px solid #1d3935;
+      font-size: 14px;
     }
 
     .result-row:last-child {
-      border-bottom: none;
+      border-bottom: 0;
     }
 
-    .lot-size {
-      font-size: 32px;
-      font-weight: bold;
-      text-align: center;
-      margin: 15px 0;
-      color: #21c7a8;
+    .result-row span {
+      color: #9eb4b0;
     }
 
-    .error {
-      color: #ff8f8f;
-      margin-top: 15px;
-      text-align: center;
-      display: none;
+    .result-row strong {
+      text-align: right;
+      color: #ffffff;
+    }
+
+    .rate-box {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(33, 199, 168, 0.05);
+      border: 1px solid #1d3935;
+    }
+
+    .rate-box label {
+      margin: 0 0 7px;
+      font-size: 12px;
+    }
+
+    .rate-box input {
+      height: 42px;
+      font-size: 14px;
     }
 
     .note {
-      margin-top: 20px;
-      font-size: 12px;
-      line-height: 1.5;
-      color: #8da4a0;
+      margin: 18px 2px 0;
       text-align: center;
+      color: #819793;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .footer {
+      text-align: center;
+      margin: 18px 0 5px;
+      color: #607773;
+      font-size: 11px;
+    }
+
+    @media (max-width: 380px) {
+      body {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .lot-size {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <h1>🇳🇬 Naira Lot Size Calculator</h1>
+    <div class="header">
+      <div class="logo">🇳🇬 NairaLotSize</div>
+      <div class="subtitle">
+        Forex position-size calculator for accounts held in Nigerian Naira
+      </div>
+    </div>
 
-  <div class="subtitle">
-    Calculate your forex lot size using Nigerian Naira
-  </div>
+    <div class="card">
 
-  <div class="card">
+      <label for="balance">Account Balance (₦)</label>
+      <input
+        id="balance"
+        type="number"
+        inputmode="decimal"
+        min="0"
+        step="any"
+        placeholder="Example: 100000"
+      >
 
-    <label>Account Balance (₦)</label>
-    <input id="balance" type="number" placeholder="Example: 100000">
+      <label for="risk">Risk Percentage (%)</label>
+      <select id="risk">
+        <option value="0.5">0.5%</option>
+        <option value="1" selected>1%</option>
+        <option value="1.5">1.5%</option>
+        <option value="2">2%</option>
+      </select>
 
-    <label>Risk Percentage (%)</label>
-    <select id="risk">
-      <option value="0.5">0.5%</option>
-      <option value="1" selected>1%</option>
-      <option value="1.5">1.5%</option>
-      <option value="2">2%</option>
-    </select>
+      <label for="pair">Currency Pair</label>
+      <select id="pair">
+        <option value="GBPUSD">GBP/USD</option>
+        <option value="EURUSD">EUR/USD</option>
+        <option value="USDJPY">USD/JPY</option>
+        <option value="GBPJPY">GBP/JPY</option>
+        <option value="EURJPY">EUR/JPY</option>
+        <option value="AUDUSD">AUD/USD</option>
+        <option value="NZDUSD">NZD/USD</option>
+        <option value="USDCAD">USD/CAD</option>
+        <option value="USDCHF">USD/CHF</option>
+      </select>
 
-    <label>Currency Pair</label>
-    <select id="pair">
-      <option value="GBPUSD">GBP/USD</option>
-      <option value="EURUSD">EUR/USD</option>
-      <option value="USDJPY">USD/JPY</option>
-      <option value="GBPJPY">GBP/JPY</option>
-      <option value="EURJPY">EUR/JPY</option>
-      <option value="AUDUSD">AUD/USD</option>
-      <option value="USDCAD">USD/CAD</option>
-      <option value="USDCHF">USD/CHF</option>
-      <option value="NZDUSD">NZD/USD</option>
-    </select>
+      <label>Direction</label>
 
-    <label>Direction</label>
+      <div class="direction">
+        <button id="buyBtn" class="active" type="button">
+          BUY
+        </button>
 
-    <div class="direction">
-      <button id="buyBtn" class="active" onclick="setDirection('buy')">
-        BUY
+        <button id="sellBtn" type="button">
+          SELL
+        </button>
+      </div>
+
+      <label for="entry">Entry Price</label>
+      <input
+        id="entry"
+        type="number"
+        inputmode="decimal"
+        step="any"
+        placeholder="Example: 1.35000"
+      >
+
+      <label for="stop">Stop Loss Price</label>
+      <input
+        id="stop"
+        type="number"
+        inputmode="decimal"
+        step="any"
+        placeholder="Example: 1.34500"
+      >
+
+      <label for="take">Take Profit Price (Optional)</label>
+      <input
+        id="take"
+        type="number"
+        inputmode="decimal"
+        step="any"
+        placeholder="Example: 1.36000"
+      >
+
+      <div class="rate-box">
+        <label for="usdngn">
+          USD/NGN Conversion Rate
+        </label>
+
+        <input
+          id="usdngn"
+          type="number"
+          inputmode="decimal"
+          min="1"
+          step="any"
+          value="1500"
+        >
+      </div>
+
+      <button id="calculateBtn" class="calculate" type="button">
+        CALCULATE LOT SIZE
       </button>
 
-      <button id="sellBtn" onclick="setDirection('sell')">
-        SELL
-      </button>
-    </div>
+      <div id="error" class="error"></div>
 
-    <label>Entry Price</label>
-    <input id="entry" type="number" step="any" placeholder="Example: 1.35000">
+      <div id="result" class="result">
 
-    <label>Stop Loss Price</label>
-    <input id="stop" type="number" step="any" placeholder="Example: 1.34500">
+        <h2 class="result-title">Calculation Result</h2>
 
-    <label>Take Profit Price (Optional)</label>
-    <input id="take" type="number" step="any" placeholder="Example: 1.36000">
+        <div id="lots" class="lot-size">
+          0.00 lots
+        </div>
 
-    <button class="calculate" onclick="calculate()">
-      CALCULATE LOT SIZE
-    </button>
+        <div class="result-row">
+          <span>Risk Amount</span>
+          <strong id="riskAmount">₦0.00</strong>
+        </div>
 
-    <div id="error" class="error"></div>
+        <div class="result-row">
+          <span>Stop Loss</span>
+          <strong id="stopDistance">0 pips</strong>
+        </div>
 
-    <div id="result" class="result">
+        <div class="result-row">
+          <span>Units</span>
+          <strong id="units">0</strong>
+        </div>
 
-      <h2>Your Result</h2>
+        <div class="result-row">
+          <span>Potential Loss</span>
+          <strong id="potentialLoss">₦0.00</strong>
+        </div>
 
-      <div class="lot-size" id="lots">
-        0.00 lots
+        <div class="result-row">
+          <span>Potential Profit</span>
+          <strong id="potentialProfit">—</strong>
+        </div>
+
+        <div class="result-row">
+          <span>Risk : Reward</span>
+          <strong id="rr">—</strong>
+        </div>
+
+        <div class="result-row">
+          <span>USD/NGN Used</span>
+          <strong id="rateUsed">₦1,500.00</strong>
+        </div>
+
       </div>
 
-      <div class="result-row">
-        <span>Risk Amount</span>
-        <strong id="riskAmount">₦0</strong>
-      </div>
-
-      <div class="result-row">
-        <span>Stop Loss</span>
-        <strong id="pips">0 pips</strong>
-      </div>
-
-      <div class="result-row">
-        <span>Units</span>
-        <strong id="units">0</strong>
-      </div>
-
-      <div class="result-row">
-        <span>Potential Loss</span>
-        <strong id="loss">₦0</strong>
-      </div>
-
-      <div class="result-row">
-        <span>Potential Profit</span>
-        <strong id="profit">—</strong>
-      </div>
-
-      <div class="result-row">
-        <span>Risk : Reward</span>
-        <strong id="rr">—</strong>
+      <div class="note">
+        The USD/NGN rate can be updated before calculating.
+        Always verify the final position size against your broker
+        or prop-firm contract specifications.
       </div>
 
     </div>
 
-    <div class="note">
-      Lot size is calculated from your account balance, risk percentage
-      and stop-loss distance. Always confirm the final order size with
-      your broker or prop firm specifications.
+    <div class="footer">
+      NairaLotSize • Position sizing made simple
     </div>
 
   </div>
-</div>
 
 <script>
 
-let direction = "buy";
-
-function setDirection(value) {
-
-  direction = value;
-
-  document.getElementById("buyBtn").classList.remove("active");
-  document.getElementById("sellBtn").classList.remove("active");
-
-  if (value === "buy") {
-    document.getElementById("buyBtn").classList.add("active");
-  } else {
-    document.getElementById("sellBtn").classList.add("active");
-  }
-}
-
-function calculate() {
-
-  const balance = Number(document.getElementById("balance").value);
-  const riskPercent = Number(document.getElementById("risk").value);
-  const pair = document.getElementById("pair").value;
-  const entry = Number(document.getElementById("entry").value);
-  const stop = Number(document.getElementById("stop").value);
-  const takeInput = document.getElementById("take").value;
-  const take = takeInput === "" ? null : Number(takeInput);
-
-  const error = document.getElementById("error");
-  const result = document.getElementById("result");
-
-  error.style.display = "none";
-  result.style.display = "none";
-
-  if (!balance || balance <= 0) {
-    showError("Enter a valid account balance.");
-    return;
-  }
-
-  if (!entry || !stop || entry <= 0 || stop <= 0) {
-    showError("Enter valid Entry and Stop Loss prices.");
-    return;
-  }
-
-  if (entry === stop) {
-    showError("Entry and Stop Loss cannot be the same.");
-    return;
-  }
-
-  if (direction === "buy" && stop >= entry) {
-    showError("For a BUY, Stop Loss must be below Entry.");
-    return;
-  }
-
-  if (direction === "sell" && stop <= entry) {
-    showError("For a SELL, Stop Loss must be above Entry.");
-    return;
-  }
-
-  if (take !== null) {
-
-    if (direction === "buy" && take <= entry) {
-      showError("For a BUY, Take Profit must be above Entry.");
-      return;
-    }
-
-    if (direction === "sell" && take >= entry) {
-      showError("For a SELL, Take Profit must be below Entry.");
-      return;
-    }
-  }
-
-  const riskAmount = balance * (riskPercent / 100);
-
-  const distance = Math.abs(entry - stop);
-
-  let pipSize = 0.0001;
-
-  if (pair === "USDJPY" ||
-      pair === "GBPJPY" ||
-      pair === "EURJPY") {
-    pipSize = 0.01;
-  }
-
-  const pips = distance / pipSize;
-
-  /*
-    For USD-quoted pairs:
-    1 standard lot = $10 per pip.
-
-    Because the account is in Naira, we need a USD/NGN
-    conversion rate.
-
-    This rate is intentionally displayed here so it can
-    be updated later with a live FX source.
-  */
-
-  const USD_NGN = 1500;
-
-  let pipValueUSD;
-
-  if (
-    pair === "GBPUSD" ||
-    pair === "EURUSD" ||
-    pair === "AUDUSD" ||
-    pair === "NZDUSD"
-  ) {
-
-    pipValueUSD = 10;
-
-  } else if (
-    pair === "USDJPY"
-  ) {
-
-    /*
-      USDJPY pip value depends on USDJPY price.
-    */
-
-    pipValueUSD = (0.01 / entry) * 100000;
-
-  } else if (
-    pair === "GBPJPY" ||
-    pair === "EURJPY"
-  ) {
-
-    /*
-      JPY-quoted pairs need conversion from JPY to USD.
-      We use USDJPY as the conversion reference.
-    */
-
-    const USDJPY = 149.52;
-
-    const pipValueJPY = 0.01 * 100000;
-
-    pipValueUSD = pipValueJPY / USDJPY;
-
-  } else if (pair === "USDCAD") {
-
-    const USDCAD = 1.36;
-
-    pipValueUSD = (0.0001 / USDCAD) * 100000;
-
-  } else if (pair === "USDCHF") {
-
-    const USDCHF = 0.88;
-
-    pipValueUSD = (0.0001 / USDCHF) * 100000;
-
-  } else {
-
-    pipValueUSD = 10;
-  }
-
-  const pipValueNaira = pipValueUSD * USD_NGN;
-
-  const riskPerLot = pips * pipValueNaira;
-
-  let lots = riskAmount / riskPerLot;
-
-  /*
-    Broker standard lot precision.
-  */
-
-  lots = Math.floor(lots * 100) / 100;
-
-  if (lots < 0.01) {
-    showError(
-      "The calculated lot size is below 0.01 lots. Your risk or stop-loss distance may be too small."
-    );
-    return;
-  }
-
-  const units = Math.round(lots * 100000);
-
-  const potentialLoss = lots * riskPerLot;
-
-  let potentialProfit = null;
-  let rr = null;
-
-  if (take !== null) {
-
-    const rewardDistance = Math.abs(take - entry);
-
-    const rewardPips = rewardDistance / pipSize;
-
-    rr = rewardPips / pips;
-
-    potentialProfit = potentialLoss * rr;
-  }
-
-  document.getElementById("lots").textContent =
-    lots.toFixed(2) + " lots";
-
-  document.getElementById("riskAmount").textContent =
-    formatNaira(riskAmount);
-
-  document.getElementById("pips").textContent =
-    pips.toFixed(1) + " pips";
-
-  document.getElementById("units").textContent =
-    units.toLocaleString();
-
-  document.getElementById("loss").textContent =
-    formatNaira(potentialLoss);
-
-  document.getElementById("profit").textContent =
-    potentialProfit === null
-      ? "—"
-      : formatNaira(potentialProfit);
-
-  document.getElementById("rr").textContent =
-    rr === null
-      ? "—"
-      : "1 : " + rr.toFixed(2);
-
-  result.style.display = "block";
-}
-
-function formatNaira(value) {
-
-  return "₦" + value.toLocaleString("en-NG", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+  let direction = "buy";
+
+  const buyBtn = document.getElementById("buyBtn");
+  const sellBtn = document.getElementById("sellBtn");
+
+  buyBtn.addEventListener("click", function () {
+    direction = "buy";
+    buyBtn.classList.add("active");
+    sellBtn.classList.remove("active");
   });
-}
 
-function showError(message) {
+  sellBtn.addEventListener("click", function () {
+    direction = "sell";
+    sellBtn.classList.add("active");
+    buyBtn.classList.remove("active");
+  });
 
-  const error = document.getElementById("error");
+  function getPipSize(pair) {
 
-  error.textContent = message;
-  error.style.display = "block";
-}
+    if (
+      pair === "USDJPY" ||
+      pair === "GBPJPY" ||
+      pair === "EURJPY"
+    ) {
+      return 0.01;
+    }
+
+    return 0.0001;
+  }
+
+  function getPipValueInUSD(pair, price) {
+
+    /*
+      Standard forex lot = 100,000 units.
+
+      For pairs where USD is the quote currency,
+      one pip on one standard lot is approximately $10.
+
+      For USD/JPY, GBP/JPY and EUR/JPY we convert
+      the JPY pip value into USD using USD/JPY.
+    */
+
+    const standardLot = 100000;
+    const pip = getPipSize(pair);
+
+    if (
+      pair === "GBPUSD" ||
+      pair === "EURUSD" ||
+      pair === "AUDUSD" ||
+      pair === "NZDUSD"
+    ) {
+      return pip * standardLot;
+    }
+
+    if (pair === "USDJPY") {
+      return (pip * standardLot) / price;
+    }
+
+    if (
+      pair === "GBPJPY" ||
+      pair === "EURJPY"
+    ) {
+      const usdJpyReference = 149.52;
+      const pipValueJPY = pip * standardLot;
+
+      return pipValueJPY / usdJpyReference;
+    }
+
+    if (pair === "USDCAD") {
+      const usdCadReference = 1.36;
+
+      return (pip * standardLot) / usdCadReference;
+    }
+
+    if (pair === "USDCHF") {
+      const usdChfReference = 0.88;
+
+      return (pip * standardLot) / usdChfReference;
+    }
+
+    return pip * standardLot;
+  }
+
+  function formatNaira(value) {
+
+    return "₦" + Number(value).toLocaleString("en-NG", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  function showError(message) {
+
+    const error = document.getElementById("error");
+
+    error.textContent = message;
+    error.style.display = "block";
+  }
+
+  function clearError() {
+
+    const error = document.getElementById("error");
+
+    error.textContent = "";
+    error.style.display = "none";
+  }
+
+  function calculate() {
+
+    clearError();
+
+    const balance = Number(
+      document.getElementById("balance").value
+    );
+
+    const riskPercent = Number(
+      document.getElementById("risk").value
+    );
+
+    const pair = document.getElementById("pair").value;
+
+    const entry = Number(
+      document.getElementById("entry").value
+    );
+
+    const stop = Number(
+      document.getElementById("stop").value
+    );
+
+    const takeInput =
+      document.getElementById("take").value.trim();
+
+    const take =
+      takeInput === ""
+        ? null
+        : Number(takeInput);
+
+    const usdNgn = Number(
+      document.getElementById("usdngn").value
+    );
+
+    if (!Number.isFinite(balance) || balance <= 0) {
+      showError("Enter a valid account balance.");
+      return;
+    }
+
+    if (!Number.isFinite(riskPercent) || riskPercent <= 0) {
+      showError("Enter a valid risk percentage.");
+      return;
+    }
+
+    if (!Number.isFinite(entry) || entry <= 0) {
+      showError("Enter a valid entry price.");
+      return;
+    }
+
+    if (!Number.isFinite(stop) || stop <= 0) {
+      showError("Enter a valid stop-loss price.");
+      return;
+    }
+
+    if (!Number.isFinite(usdNgn) || usdNgn <= 0) {
+      showError("Enter a valid USD/NGN conversion rate.");
+      return;
+    }
+
+    if (entry === stop) {
+      showError("Entry and Stop Loss cannot be the same.");
+      return;
+    }
+
+    if (direction === "buy" && stop >= entry) {
+      showError(
+        "For a BUY trade, Stop Loss must be below Entry."
+      );
+      return;
+    }
+
+    if (direction === "sell" && stop <= entry) {
+      showError(
+        "For a SELL trade, Stop Loss must be above Entry."
+      );
+      return;
+    }
+
+    if (take !== null) {
+
+      if (!Number.isFinite(take) || take <= 0) {
+        showError("Enter a valid Take Profit price.");
+        return;
+      }
+
+      if (direction === "buy" && take <= entry) {
+        showError(
+          "For a BUY trade, Take Profit must be above Entry."
+        );
+        return;
+      }
+
+      if (direction === "sell" && take >= entry) {
+        showError(
+          "For a SELL trade, Take Profit must be below Entry."
+        );
+        return;
+      }
+    }
+
+    const riskAmount =
+      balance * (riskPercent / 100);
+
+    const pip = getPipSize(pair);
+
+    const stopDistancePrice =
+      Math.abs(entry - stop);
+
+    const stopLossPips =
+      stopDistancePrice / pip;
+
+    const pipValueUSD =
+      getPipValueInUSD(pair, entry);
+
+    const pipValueNaira =
+      pipValueUSD * usdNgn;
+
+    const riskPerOneLot =
+      stopLossPips * pipValueNaira;
+
+    if (
+      !Number.isFinite(riskPerOneLot) ||
+      riskPerOneLot <= 0
+    ) {
+      showError(
+        "Unable to calculate the position size. Check your prices."
+      );
+      return;
+    }
+
+    let rawLots =
+      riskAmount / riskPerOneLot;
+
+    /*
+      Round DOWN to the nearest 0.01 lot so the
+      selected risk is not exceeded.
+    */
+
+    const lots =
+      Math.floor(rawLots * 100) / 100;
+
+    if (lots < 0.01) {
+
+      showError(
+        "The calculated position is below 0.01 lots. " +
+        "Increase the account balance/risk or use a smaller stop-loss distance."
+      );
+
+      return;
+    }
+
+    const units =
+      Math.round(lots * 100000);
+
+    const actualPotentialLoss =
+      lots * riskPerOneLot;
+
+    let potentialProfit = null;
+    let rr = null;
+
+    if (take !== null) {
+
+      const rewardDistance =
+        Math.abs(take - entry);
+
+      const rewardPips =
+        rewardDistance / pip;
+
+      rr =
+        rewardPips / stopLossPips;
+
+      potentialProfit =
+        actualPotentialLoss * rr;
+    }
+
+    document.getElementById("lots").textContent =
+      lots.toFixed(2) + " lots";
+
+    document.getElementById("riskAmount").textContent =
+      formatNaira(riskAmount);
+
+    document.getElementById("stopDistance").textContent =
+      stopLossPips.toFixed(1) + " pips";
+
+    document.getElementById("units").textContent =
+      units.toLocaleString("en-US");
+
+    document.getElementById("potentialLoss").textContent =
+      formatNaira(actualPotentialLoss);
+
+    document.getElementById("potentialProfit").textContent =
+      potentialProfit === null
+        ? "—"
+        : formatNaira(potentialProfit);
+
+    document.getElementById("rr").textContent =
+      rr === null
+        ? "—"
+        : "1 : " + rr.toFixed(2);
+
+    document.getElementById("rateUsed").textContent =
+      formatNaira(usdNgn);
+
+    document.getElementById("result").style.display =
+      "block";
+  }
+
+  document
+    .getElementById("calculateBtn")
+    .addEventListener("click", calculate);
 
 </script>
 
 </body>
-  </html>
+</html>
