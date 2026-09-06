@@ -7,7 +7,9 @@
   <title>NairaLotSize — Naira Forex Lot Size Calculator</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -55,7 +57,8 @@
       font-weight: 600;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
       height: 48px;
       padding: 0 13px;
@@ -67,7 +70,8 @@
       outline: none;
     }
 
-    input:focus, select:focus {
+    input:focus,
+    select:focus {
       border-color: #21c7a8;
     }
 
@@ -229,9 +233,17 @@
     }
 
     @media (max-width: 380px) {
-      body { padding: 12px; }
-      .card { padding: 15px; }
-      .lot-size { font-size: 30px; }
+      body {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .lot-size {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
@@ -242,24 +254,33 @@
 
   <div class="header">
     <div class="logo">🇳🇬 NairaLotSize</div>
+
     <div class="subtitle">
       Forex position-size calculator for accounts held in Nigerian Naira
     </div>
   </div>
 
+
   <div class="card">
 
-    <label for="balance">Account Balance (₦)</label>
+    <label for="balance">
+      Account Balance (₦)
+    </label>
+
     <input
       id="balance"
       type="number"
       inputmode="decimal"
       min="0"
       step="any"
-      placeholder="Example: 1500000"
+      placeholder="Example: 750000"
     >
 
-    <label for="risk">Risk Percentage (%)</label>
+
+    <label for="risk">
+      Risk Percentage (%)
+    </label>
+
     <select id="risk">
       <option value="0.25">0.25%</option>
       <option value="0.5">0.5%</option>
@@ -269,7 +290,11 @@
       <option value="2">2%</option>
     </select>
 
-    <label for="minLot">Broker Minimum Lot Size</label>
+
+    <label for="minLot">
+      Broker Minimum Lot Size
+    </label>
+
     <select id="minLot">
       <option value="0.0001">0.0001</option>
       <option value="0.001">0.001</option>
@@ -279,7 +304,11 @@
       <option value="1">1.00</option>
     </select>
 
-    <label for="pair">Currency Pair</label>
+
+    <label for="pair">
+      Currency Pair
+    </label>
+
     <select id="pair">
       <option value="GBPUSD">GBP/USD</option>
       <option value="EURUSD">EUR/USD</option>
@@ -293,14 +322,35 @@
       <option value="USDCHF">USD/CHF</option>
     </select>
 
-    <label>Direction</label>
+
+    <label>
+      Direction
+    </label>
 
     <div class="direction">
-      <button id="buyBtn" class="active" type="button">BUY</button>
-      <button id="sellBtn" type="button">SELL</button>
+
+      <button
+        id="buyBtn"
+        class="active"
+        type="button"
+      >
+        BUY
+      </button>
+
+      <button
+        id="sellBtn"
+        type="button"
+      >
+        SELL
+      </button>
+
     </div>
 
-    <label for="entry">Entry Price</label>
+
+    <label for="entry">
+      Entry Price
+    </label>
+
     <input
       id="entry"
       type="number"
@@ -309,7 +359,11 @@
       placeholder="Example: 1.35000"
     >
 
-    <label for="stop">Stop Loss Price</label>
+
+    <label for="stop">
+      Stop Loss Price
+    </label>
+
     <input
       id="stop"
       type="number"
@@ -318,7 +372,11 @@
       placeholder="Example: 1.34500"
     >
 
-    <label for="take">Take Profit Price (Optional)</label>
+
+    <label for="take">
+      Take Profit Price (Optional)
+    </label>
+
     <input
       id="take"
       type="number"
@@ -327,67 +385,98 @@
       placeholder="Example: 1.36000"
     >
 
-    <div id="rateStatus" class="rate-status loading">
+
+    <div
+      id="rateStatus"
+      class="rate-status loading"
+    >
       Getting current USD/NGN rate...
     </div>
 
-    <button id="calculateBtn" class="calculate" type="button">
+
+    <button
+      id="calculateBtn"
+      class="calculate"
+      type="button"
+    >
       CALCULATE LOT SIZE
     </button>
+
 
     <div id="error" class="error"></div>
 
     <div id="warning" class="warning"></div>
 
+
     <div id="result" class="result">
 
-      <h2 class="result-title">Calculation Result</h2>
+      <h2 class="result-title">
+        Calculation Result
+      </h2>
+
 
       <div class="actual-lot">
         Actual Lot Size:
-        <strong id="actualLots">0.0000 lots</strong>
+        <strong id="actualLots">
+          0.0000 lots
+        </strong>
       </div>
+
 
       <div class="recommended-label">
         Recommended Lot Size
       </div>
 
-      <div id="lots" class="lot-size">0.0000 lots</div>
+
+      <div
+        id="lots"
+        class="lot-size"
+      >
+        0.0000 lots
+      </div>
+
 
       <div class="result-row">
         <span>Risk Amount</span>
         <strong id="riskAmount">₦0.00</strong>
       </div>
 
+
       <div class="result-row">
         <span>Stop Loss</span>
         <strong id="stopDistance">0.0 pips</strong>
       </div>
+
 
       <div class="result-row">
         <span>Units</span>
         <strong id="units">0</strong>
       </div>
 
+
       <div class="result-row">
         <span>Potential Loss</span>
         <strong id="potentialLoss">₦0.00</strong>
       </div>
+
 
       <div class="result-row">
         <span>Potential Profit</span>
         <strong id="potentialProfit">—</strong>
       </div>
 
+
       <div class="result-row">
         <span>Risk : Reward</span>
         <strong id="rr">—</strong>
       </div>
 
+
       <div class="result-row">
         <span>Broker Minimum</span>
         <strong id="minimumUsed">0.0100 lots</strong>
       </div>
+
 
       <div class="result-row">
         <span>USD/NGN Rate</span>
@@ -396,15 +485,17 @@
 
     </div>
 
+
     <div class="note">
-      The Actual Lot Size is the precise position size calculated from your
-      selected risk. The Recommended Lot Size is rounded down to the
-      broker's selected lot step when possible. If the broker minimum is
-      larger than the calculated lot, the minimum lot will exceed your
-      planned risk and a warning will be displayed.
+      The Actual Lot Size is the precise position size calculated from
+      your selected risk. The Recommended Lot Size is rounded DOWN to
+      the selected broker lot step whenever possible. If the exact lot
+      is below the broker minimum, the minimum lot is shown and a warning
+      explains the additional risk.
     </div>
 
   </div>
+
 
   <div class="footer">
     NairaLotSize • Position sizing made simple
@@ -412,85 +503,141 @@
 
 </div>
 
+
 <script>
 
 let direction = "buy";
 
 /*
-  IMPORTANT:
-  We do NOT use a hardcoded USD/NGN fallback for calculations.
-  For real-money position sizing, the calculator must have a
-  successful live exchange-rate response.
+  No hardcoded USD/NGN rate is used.
+
+  If the live rate cannot be obtained, calculation is disabled.
+  This is safer for real-money position sizing.
 */
 let usdNgn = null;
 let fxRates = null;
 
-const buyBtn = document.getElementById("buyBtn");
-const sellBtn = document.getElementById("sellBtn");
-const rateStatus = document.getElementById("rateStatus");
+
+/*
+  BUY / SELL buttons
+*/
+
+const buyBtn =
+  document.getElementById("buyBtn");
+
+const sellBtn =
+  document.getElementById("sellBtn");
+
+const rateStatus =
+  document.getElementById("rateStatus");
+
 
 buyBtn.addEventListener("click", function () {
+
   direction = "buy";
+
   buyBtn.classList.add("active");
+
   sellBtn.classList.remove("active");
+
 });
+
 
 sellBtn.addEventListener("click", function () {
+
   direction = "sell";
+
   sellBtn.classList.add("active");
+
   buyBtn.classList.remove("active");
+
 });
 
+
+/*
+  Get live USD/NGN and other currency conversion rates.
+*/
 
 async function loadExchangeRates() {
 
-  rateStatus.className = "rate-status loading";
-  rateStatus.textContent = "Getting current USD/NGN rate...";
+  rateStatus.className =
+    "rate-status loading";
+
+  rateStatus.textContent =
+    "Getting current USD/NGN rate...";
+
 
   try {
 
-    const response = await fetch(
-      "https://open.er-api.com/v6/latest/USD",
-      {
-        cache: "no-store"
-      }
-    );
+    const response =
+      await fetch(
+        "https://open.er-api.com/v6/latest/USD",
+        {
+          cache: "no-store"
+        }
+      );
+
 
     if (!response.ok) {
-      throw new Error("Exchange rate request failed");
+      throw new Error(
+        "Exchange rate request failed"
+      );
     }
 
-    const data = await response.json();
+
+    const data =
+      await response.json();
+
 
     if (
       !data ||
       data.result !== "success" ||
       !data.rates ||
-      !Number.isFinite(Number(data.rates.NGN)) ||
+      !Number.isFinite(
+        Number(data.rates.NGN)
+      ) ||
       Number(data.rates.NGN) <= 0
     ) {
-      throw new Error("Invalid exchange-rate response");
+
+      throw new Error(
+        "Invalid exchange-rate response"
+      );
     }
 
-    usdNgn = Number(data.rates.NGN);
-    fxRates = data.rates;
 
-    rateStatus.className = "rate-status success";
+    usdNgn =
+      Number(data.rates.NGN);
+
+    fxRates =
+      data.rates;
+
+
+    rateStatus.className =
+      "rate-status success";
+
 
     rateStatus.textContent =
       "✓ USD/NGN: ₦" +
-      usdNgn.toLocaleString("en-NG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }) +
+      usdNgn.toLocaleString(
+        "en-NG",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      ) +
       " • Updated automatically";
+
 
   } catch (error) {
 
     usdNgn = null;
+
     fxRates = null;
 
-    rateStatus.className = "rate-status error";
+
+    rateStatus.className =
+      "rate-status error";
+
 
     rateStatus.textContent =
       "Live USD/NGN rate unavailable • Calculation disabled";
@@ -499,10 +646,15 @@ async function loadExchangeRates() {
 
 
 /*
-  Forex pip size.
-  JPY pairs normally use 0.01.
-  Non-JPY pairs normally use 0.0001.
+  Pip size.
+
+  JPY pairs:
+    0.01
+
+  Other listed forex pairs:
+    0.0001
 */
+
 function getPipSize(pair) {
 
   if (
@@ -510,6 +662,7 @@ function getPipSize(pair) {
     pair === "GBPJPY" ||
     pair === "EURJPY"
   ) {
+
     return 0.01;
   }
 
@@ -518,149 +671,266 @@ function getPipSize(pair) {
 
 
 /*
-  Returns the USD value of ONE pip for ONE standard lot.
+  Calculate the USD value of one pip
+  for ONE standard lot.
 
-  Standard lot = 100,000 base units.
-
-  Examples:
-    GBP/USD = $10 per pip
-    EUR/USD = $10 per pip
-    USD/JPY = 1000 JPY / USDJPY
-    GBP/JPY = 1000 JPY / USDJPY
-    EUR/GBP = 10 GBP converted to USD
-    USD/CAD = 10 CAD / USDCAD
-    USD/CHF = 10 CHF / USDCHF
+  Standard forex lot:
+    1.00 lot = 100,000 units
 */
-function getPipValueUSD(pair, entry) {
+
+
+function getPipValueUSD(pair) {
 
   if (!fxRates) {
-    throw new Error("Live exchange rates unavailable.");
+
+    throw new Error(
+      "Live exchange rates unavailable."
+    );
   }
 
+
   const standardLot = 100000;
-  const pip = getPipSize(pair);
+
+  const pip =
+    getPipSize(pair);
+
 
   /*
-    Pairs where USD is the QUOTE currency.
-    Example GBP/USD:
-    1 pip = 0.0001 × 100,000 = 10 USD
+    GBP/USD
+    EUR/USD
+    AUD/USD
+    NZD/USD
+
+    USD is the quote currency.
+
+    1 pip = 0.0001 × 100,000
+          = $10
   */
+
   if (
     pair === "GBPUSD" ||
     pair === "EURUSD" ||
     pair === "AUDUSD" ||
     pair === "NZDUSD"
   ) {
+
     return pip * standardLot;
   }
 
 
   /*
-    USD/JPY:
-    1 pip = 0.01 × 100,000 = 1,000 JPY.
-    Convert JPY to USD by dividing by USD/JPY.
+    USD/JPY
+
+    1 pip = 0.01 × 100,000
+          = 1,000 JPY
+
+    Convert JPY to USD:
+      1,000 / USDJPY
   */
+
   if (pair === "USDJPY") {
 
-    const usdJpy = Number(fxRates.JPY);
+    const usdJpy =
+      Number(fxRates.JPY);
 
-    if (!Number.isFinite(usdJpy) || usdJpy <= 0) {
-      throw new Error("USD/JPY conversion rate unavailable.");
+
+    if (
+      !Number.isFinite(usdJpy) ||
+      usdJpy <= 0
+    ) {
+
+      throw new Error(
+        "USD/JPY conversion rate unavailable."
+      );
     }
 
-    return (pip * standardLot) / usdJpy;
+
+    return (
+      pip *
+      standardLot /
+      usdJpy
+    );
   }
 
 
   /*
-    GBP/JPY and EUR/JPY:
-    1 pip = 1,000 JPY per standard lot.
+    GBP/JPY
+    EUR/JPY
+
+    1 pip = 1,000 JPY
+
     Convert JPY to USD.
   */
+
   if (
     pair === "GBPJPY" ||
     pair === "EURJPY"
   ) {
 
-    const usdJpy = Number(fxRates.JPY);
+    const usdJpy =
+      Number(fxRates.JPY);
 
-    if (!Number.isFinite(usdJpy) || usdJpy <= 0) {
-      throw new Error("JPY conversion rate unavailable.");
+
+    if (
+      !Number.isFinite(usdJpy) ||
+      usdJpy <= 0
+    ) {
+
+      throw new Error(
+        "JPY conversion rate unavailable."
+      );
     }
 
-    return (pip * standardLot) / usdJpy;
+
+    return (
+      pip *
+      standardLot /
+      usdJpy
+    );
   }
 
 
   /*
-    EUR/GBP:
-    1 pip = 10 GBP per standard lot.
+    EUR/GBP
 
-    The API is USD based:
+    1 pip = 10 GBP.
+
+    The API gives:
+
       1 USD = X GBP
 
     Therefore:
-      1 GBP = 1/X USD
 
-    So we DIVIDE by the GBP rate.
+      1 GBP = 1 / X USD
+
+    So:
+
+      10 GBP = 10 / X USD
   */
+
   if (pair === "EURGBP") {
 
-    const usdToGbp = Number(fxRates.GBP);
+    const usdToGbp =
+      Number(fxRates.GBP);
 
-    if (!Number.isFinite(usdToGbp) || usdToGbp <= 0) {
-      throw new Error("GBP conversion rate unavailable.");
+
+    if (
+      !Number.isFinite(usdToGbp) ||
+      usdToGbp <= 0
+    ) {
+
+      throw new Error(
+        "GBP conversion rate unavailable."
+      );
     }
 
-    return (pip * standardLot) / usdToGbp;
+
+    return (
+      pip *
+      standardLot /
+      usdToGbp
+    );
   }
 
 
   /*
-    USD/CAD:
+    USD/CAD
+
     1 pip = 10 CAD.
-    Convert CAD to USD using USD/CAD.
+
+    Convert CAD to USD:
+      10 / USDCAD
   */
+
   if (pair === "USDCAD") {
 
-    const usdCad = Number(fxRates.CAD);
+    const usdCad =
+      Number(fxRates.CAD);
 
-    if (!Number.isFinite(usdCad) || usdCad <= 0) {
-      throw new Error("CAD conversion rate unavailable.");
+
+    if (
+      !Number.isFinite(usdCad) ||
+      usdCad <= 0
+    ) {
+
+      throw new Error(
+        "CAD conversion rate unavailable."
+      );
     }
 
-    return (pip * standardLot) / usdCad;
+
+    return (
+      pip *
+      standardLot /
+      usdCad
+    );
   }
 
 
   /*
-    USD/CHF:
+    USD/CHF
+
     1 pip = 10 CHF.
-    Convert CHF to USD using USD/CHF.
+
+    Convert CHF to USD:
+      10 / USDCHF
   */
+
   if (pair === "USDCHF") {
 
-    const usdChf = Number(fxRates.CHF);
+    const usdChf =
+      Number(fxRates.CHF);
 
-    if (!Number.isFinite(usdChf) || usdChf <= 0) {
-      throw new Error("CHF conversion rate unavailable.");
+
+    if (
+      !Number.isFinite(usdChf) ||
+      usdChf <= 0
+    ) {
+
+      throw new Error(
+        "CHF conversion rate unavailable."
+      );
     }
 
-    return (pip * standardLot) / usdChf;
+
+    return (
+      pip *
+      standardLot /
+      usdChf
+    );
   }
 
-  throw new Error("Unsupported currency pair.");
+
+  throw new Error(
+    "Unsupported currency pair."
+  );
 }
 
+
+/*
+  Format Naira.
+*/
 
 function formatNaira(value) {
 
-  return "₦" + Number(value).toLocaleString("en-NG", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  return (
+    "₦" +
+    Number(value).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    )
+  );
 }
 
+
+/*
+  Format lots.
+
+  Always show four decimal places.
+*/
 
 function formatLots(value) {
 
@@ -668,15 +938,26 @@ function formatLots(value) {
 }
 
 
+/*
+  Show error.
+*/
+
 function showError(message) {
 
   const error =
     document.getElementById("error");
 
-  error.textContent = message;
-  error.style.display = "block";
+  error.textContent =
+    message;
+
+  error.style.display =
+    "block";
 }
 
+
+/*
+  Clear error.
+*/
 
 function clearError() {
 
@@ -684,19 +965,32 @@ function clearError() {
     document.getElementById("error");
 
   error.textContent = "";
-  error.style.display = "none";
+
+  error.style.display =
+    "none";
 }
 
+
+/*
+  Show warning.
+*/
 
 function showWarning(message) {
 
   const warning =
     document.getElementById("warning");
 
-  warning.textContent = message;
-  warning.style.display = "block";
+  warning.textContent =
+    message;
+
+  warning.style.display =
+    "block";
 }
 
+
+/*
+  Clear warning.
+*/
 
 function clearWarning() {
 
@@ -704,62 +998,138 @@ function clearWarning() {
     document.getElementById("warning");
 
   warning.textContent = "";
-  warning.style.display = "none";
+
+  warning.style.display =
+    "none";
 }
 
 
 /*
-  Round DOWN to the broker's selected lot increment.
+  Count decimal places.
+*/
+
+function decimalPlaces(value) {
+
+  const stringValue =
+    String(value);
+
+
+  if (
+    !stringValue.includes(".")
+  ) {
+
+    return 0;
+  }
+
+
+  return stringValue
+    .split(".")[1]
+    .length;
+}
+
+
+/*
+  IMPORTANT LOT-SIZE FUNCTION
+
+  The selected Broker Minimum Lot Size is
+  treated as the broker's allowed lot step.
 
   Examples:
-    raw = 0.016, step = 0.01
-    => 0.01
 
-    raw = 0.0064, step = 0.001
-    => 0.006
+    0.0113 with 0.01
+      => 0.0100
 
-    raw = 0.0064, step = 0.0001
-    => 0.0064
+    0.0168 with 0.01
+      => 0.0100
+
+    0.0218 with 0.01
+      => 0.0200
+
+    0.0064 with 0.001
+      => 0.0060
+
+    0.0064 with 0.0001
+      => 0.0064
 */
-function roundDownToStep(value, step) {
 
-  const precision = Math.max(
-    decimalPlaces(step),
-    4
-  );
+function roundDownToLotStep(
+  value,
+  step
+) {
 
-  const multiplier = Math.pow(10, precision);
+  if (
+    !Number.isFinite(value) ||
+    !Number.isFinite(step) ||
+    value <= 0 ||
+    step <= 0
+  ) {
+
+    return 0;
+  }
+
+
+  const precision =
+    Math.max(
+      decimalPlaces(step),
+      decimalPlaces(value),
+      4
+    );
+
+
+  const multiplier =
+    Math.pow(
+      10,
+      precision
+    );
+
+
+  const valueInteger =
+    Math.floor(
+      value * multiplier +
+      Number.EPSILON
+    );
+
+
+  const stepInteger =
+    Math.round(
+      step * multiplier
+    );
+
+
+  if (stepInteger <= 0) {
+    return 0;
+  }
+
+
+  const roundedInteger =
+    Math.floor(
+      valueInteger / stepInteger
+    ) *
+    stepInteger;
+
 
   return (
-    Math.floor(
-      (value + Number.EPSILON) * multiplier
-    ) /
+    roundedInteger /
     multiplier
   );
 }
 
 
-function decimalPlaces(value) {
-
-  const stringValue = String(value);
-
-  if (!stringValue.includes(".")) {
-    return 0;
-  }
-
-  return stringValue.split(".")[1].length;
-}
-
+/*
+  Main calculation.
+*/
 
 function calculate() {
 
   clearError();
+
   clearWarning();
 
+
   /*
-    Do not calculate if the live conversion rate
-    is unavailable.
+    A live USD/NGN rate is required.
   */
+
   if (
     !Number.isFinite(usdNgn) ||
     usdNgn <= 0 ||
@@ -776,25 +1146,56 @@ function calculate() {
 
 
   const balance =
-    Number(document.getElementById("balance").value);
+    Number(
+      document.getElementById(
+        "balance"
+      ).value
+    );
+
 
   const riskPercent =
-    Number(document.getElementById("risk").value);
+    Number(
+      document.getElementById(
+        "risk"
+      ).value
+    );
+
 
   const minLot =
-    Number(document.getElementById("minLot").value);
+    Number(
+      document.getElementById(
+        "minLot"
+      ).value
+    );
+
 
   const pair =
-    document.getElementById("pair").value;
+    document.getElementById(
+      "pair"
+    ).value;
+
 
   const entry =
-    Number(document.getElementById("entry").value);
+    Number(
+      document.getElementById(
+        "entry"
+      ).value
+    );
+
 
   const stop =
-    Number(document.getElementById("stop").value);
+    Number(
+      document.getElementById(
+        "stop"
+      ).value
+    );
+
 
   const takeInput =
-    document.getElementById("take").value.trim();
+    document.getElementById(
+      "take"
+    ).value.trim();
+
 
   const take =
     takeInput === ""
@@ -802,45 +1203,94 @@ function calculate() {
       : Number(takeInput);
 
 
-  if (!Number.isFinite(balance) || balance <= 0) {
+  /*
+    Validate balance.
+  */
 
-    showError("Enter a valid account balance.");
+  if (
+    !Number.isFinite(balance) ||
+    balance <= 0
+  ) {
 
-    return;
-  }
-
-
-  if (!Number.isFinite(riskPercent) || riskPercent <= 0) {
-
-    showError("Enter a valid risk percentage.");
-
-    return;
-  }
-
-
-  if (!Number.isFinite(minLot) || minLot <= 0) {
-
-    showError("Select a valid broker minimum lot size.");
+    showError(
+      "Enter a valid account balance."
+    );
 
     return;
   }
 
 
-  if (!Number.isFinite(entry) || entry <= 0) {
+  /*
+    Validate risk.
+  */
 
-    showError("Enter a valid entry price.");
+  if (
+    !Number.isFinite(riskPercent) ||
+    riskPercent <= 0
+  ) {
+
+    showError(
+      "Enter a valid risk percentage."
+    );
 
     return;
   }
 
 
-  if (!Number.isFinite(stop) || stop <= 0) {
+  /*
+    Validate broker minimum.
+  */
 
-    showError("Enter a valid stop-loss price.");
+  if (
+    !Number.isFinite(minLot) ||
+    minLot <= 0
+  ) {
+
+    showError(
+      "Select a valid broker minimum lot size."
+    );
 
     return;
   }
 
+
+  /*
+    Validate entry.
+  */
+
+  if (
+    !Number.isFinite(entry) ||
+    entry <= 0
+  ) {
+
+    showError(
+      "Enter a valid entry price."
+    );
+
+    return;
+  }
+
+
+  /*
+    Validate stop.
+  */
+
+  if (
+    !Number.isFinite(stop) ||
+    stop <= 0
+  ) {
+
+    showError(
+      "Enter a valid stop-loss price."
+    );
+
+    return;
+  }
+
+
+  /*
+    Entry and stop cannot be identical.
+  */
 
   if (entry === stop) {
 
@@ -851,6 +1301,11 @@ function calculate() {
     return;
   }
 
+
+  /*
+    BUY:
+    Stop must be below entry.
+  */
 
   if (
     direction === "buy" &&
@@ -865,6 +1320,11 @@ function calculate() {
   }
 
 
+  /*
+    SELL:
+    Stop must be above entry.
+  */
+
   if (
     direction === "sell" &&
     stop <= entry
@@ -878,9 +1338,16 @@ function calculate() {
   }
 
 
+  /*
+    Validate Take Profit.
+  */
+
   if (take !== null) {
 
-    if (!Number.isFinite(take) || take <= 0) {
+    if (
+      !Number.isFinite(take) ||
+      take <= 0
+    ) {
 
       showError(
         "Enter a valid Take Profit price."
@@ -889,6 +1356,11 @@ function calculate() {
       return;
     }
 
+
+    /*
+      BUY:
+      TP must be above entry.
+    */
 
     if (
       direction === "buy" &&
@@ -902,6 +1374,11 @@ function calculate() {
       return;
     }
 
+
+    /*
+      SELL:
+      TP must be below entry.
+    */
 
     if (
       direction === "sell" &&
@@ -918,19 +1395,35 @@ function calculate() {
 
 
   /*
-    Amount of money the trader intends to risk.
+    Planned monetary risk.
   */
-  const riskAmount =
-    balance * (riskPercent / 100);
 
+  const riskAmount =
+    balance *
+    (riskPercent / 100);
+
+
+  /*
+    Pip size.
+  */
 
   const pip =
     getPipSize(pair);
 
 
-  const stopDistancePrice =
-    Math.abs(entry - stop);
+  /*
+    Stop distance.
+  */
 
+  const stopDistancePrice =
+    Math.abs(
+      entry - stop
+    );
+
+
+  /*
+    Stop distance in pips.
+  */
 
   const stopLossPips =
     stopDistancePrice / pip;
@@ -949,12 +1442,17 @@ function calculate() {
   }
 
 
+  /*
+    Pip value in USD.
+  */
+
   let pipValueUSD;
+
 
   try {
 
     pipValueUSD =
-      getPipValueUSD(pair, entry);
+      getPipValueUSD(pair);
 
   } catch (error) {
 
@@ -968,15 +1466,18 @@ function calculate() {
 
 
   /*
-    Convert USD pip value into Naira.
+    Convert USD pip value to Naira.
   */
+
   const pipValueNaira =
-    pipValueUSD * usdNgn;
+    pipValueUSD *
+    usdNgn;
 
 
   /*
-    Risk for ONE STANDARD LOT.
+    Risk for ONE standard lot.
   */
+
   const riskPerOneLot =
     stopLossPips *
     pipValueNaira;
@@ -996,10 +1497,15 @@ function calculate() {
 
 
   /*
-    EXACT mathematically calculated lot.
+    EXACT mathematical lot size.
+
+    This is the theoretical position size
+    needed to risk exactly the selected amount.
   */
+
   const rawLots =
-    riskAmount / riskPerOneLot;
+    riskAmount /
+    riskPerOneLot;
 
 
   if (
@@ -1016,71 +1522,105 @@ function calculate() {
 
 
   /*
-    If the exact lot is below the broker minimum,
-    the broker minimum is the only selectable lot.
+    RECOMMENDED LOT SIZE
 
-    This WILL exceed the planned risk, so we warn.
+    If the exact lot is below the broker minimum,
+    the minimum is the only possible position.
+
+    Otherwise round DOWN to the broker's
+    selected lot step.
+
+    This prevents rounding UP and accidentally
+    increasing the intended risk.
   */
+
   let recommendedLots;
+
 
   if (rawLots < minLot) {
 
-    recommendedLots = minLot;
+    recommendedLots =
+      minLot;
 
   } else {
 
-    /*
-      Round DOWN to the selected broker increment.
-      This prevents the recommended lot from exceeding
-      the intended risk merely because of rounding.
-    */
     recommendedLots =
-      roundDownToStep(rawLots, minLot);
+      roundDownToLotStep(
+        rawLots,
+        minLot
+      );
 
-    if (recommendedLots < minLot) {
-      recommendedLots = minLot;
+
+    /*
+      Safety check.
+    */
+
+    if (
+      recommendedLots < minLot
+    ) {
+
+      recommendedLots =
+        minLot;
     }
   }
 
 
   /*
-    Standard forex lot:
-      1.00 = 100,000 units
+    Standard forex:
+      1.00 lot = 100,000 units
   */
+
   const units =
-    Math.round(recommendedLots * 100000);
+    Math.round(
+      recommendedLots *
+      100000
+    );
 
 
   /*
-    Actual potential loss using the RECOMMENDED
-    lot size that would actually be traded.
+    Actual loss at the RECOMMENDED
+    position size.
   */
-  const actualPotentialLoss =
-    recommendedLots * riskPerOneLot;
 
+  const actualPotentialLoss =
+    recommendedLots *
+    riskPerOneLot;
+
+
+  /*
+    Potential profit.
+  */
 
   let potentialProfit = null;
+
   let rr = null;
 
 
   if (take !== null) {
 
     const rewardDistance =
-      Math.abs(take - entry);
+      Math.abs(
+        take - entry
+      );
 
 
     const rewardPips =
       rewardDistance / pip;
 
 
+    /*
+      Risk : Reward
+    */
+
     rr =
-      rewardPips / stopLossPips;
+      rewardPips /
+      stopLossPips;
 
 
     /*
-      Profit is calculated directly from:
-        reward pips × pip value × lots
+      Profit at recommended lot.
     */
+
     potentialProfit =
       rewardPips *
       pipValueNaira *
@@ -1089,14 +1629,29 @@ function calculate() {
 
 
   /*
-    Warn whenever the recommended broker lot
-    is greater than the exact risk-based lot.
+    WARNING #1:
+    Exact lot below broker minimum.
+
+    Example:
+
+      Exact = 0.0001
+      Minimum = 0.0100
+
+    The broker minimum is much larger,
+    so actual risk will be much higher.
   */
+
   if (recommendedLots > rawLots) {
 
     const excessPercent =
-      ((actualPotentialLoss - riskAmount) /
-      riskAmount) * 100;
+      (
+        (
+          actualPotentialLoss -
+          riskAmount
+        ) /
+        riskAmount
+      ) *
+      100;
 
 
     showWarning(
@@ -1121,72 +1676,154 @@ function calculate() {
 
 
   /*
-    Display results.
+    Display exact mathematical lot.
   */
 
-  document.getElementById("actualLots").textContent =
-    formatLots(rawLots) + " lots";
+  document.getElementById(
+    "actualLots"
+  ).textContent =
+    formatLots(rawLots) +
+    " lots";
 
 
-  document.getElementById("lots").textContent =
-    formatLots(recommendedLots) + " lots";
+  /*
+    Display broker-valid recommended lot.
+  */
+
+  document.getElementById(
+    "lots"
+  ).textContent =
+    formatLots(recommendedLots) +
+    " lots";
 
 
-  document.getElementById("riskAmount").textContent =
+  /*
+    Planned risk amount.
+  */
+
+  document.getElementById(
+    "riskAmount"
+  ).textContent =
     formatNaira(riskAmount);
 
 
-  document.getElementById("stopDistance").textContent =
-    stopLossPips.toFixed(1) + " pips";
+  /*
+    Stop loss distance.
+  */
+
+  document.getElementById(
+    "stopDistance"
+  ).textContent =
+    stopLossPips.toFixed(1) +
+    " pips";
 
 
-  document.getElementById("units").textContent =
-    units.toLocaleString("en-US");
+  /*
+    Units of the recommended position.
+  */
+
+  document.getElementById(
+    "units"
+  ).textContent =
+    units.toLocaleString(
+      "en-US"
+    );
 
 
-  document.getElementById("potentialLoss").textContent =
-    formatNaira(actualPotentialLoss);
+  /*
+    Potential loss at recommended lot.
+  */
+
+  document.getElementById(
+    "potentialLoss"
+  ).textContent =
+    formatNaira(
+      actualPotentialLoss
+    );
 
 
-  document.getElementById("potentialProfit").textContent =
+  /*
+    Potential profit at recommended lot.
+  */
+
+  document.getElementById(
+    "potentialProfit"
+  ).textContent =
     potentialProfit === null
       ? "—"
-      : formatNaira(potentialProfit);
+      : formatNaira(
+          potentialProfit
+        );
 
 
-  document.getElementById("rr").textContent =
+  /*
+    Risk : Reward.
+  */
+
+  document.getElementById(
+    "rr"
+  ).textContent =
     rr === null
       ? "—"
-      : "1 : " + rr.toFixed(2);
+      : "1 : " +
+        rr.toFixed(2);
 
 
-  document.getElementById("minimumUsed").textContent =
-    formatLots(minLot) + " lots";
+  /*
+    Broker minimum.
+  */
+
+  document.getElementById(
+    "minimumUsed"
+  ).textContent =
+    formatLots(minLot) +
+    " lots";
 
 
-  document.getElementById("rateUsed").textContent =
+  /*
+    USD/NGN rate.
+  */
+
+  document.getElementById(
+    "rateUsed"
+  ).textContent =
     formatNaira(usdNgn);
 
 
-  document.getElementById("result").style.display =
+  /*
+    Show results.
+  */
+
+  document.getElementById(
+    "result"
+  ).style.display =
     "block";
 }
 
 
+/*
+  Calculate button.
+*/
+
 document
   .getElementById("calculateBtn")
-  .addEventListener("click", calculate);
+  .addEventListener(
+    "click",
+    calculate
+  );
 
 
 /*
-  Load the rate immediately.
+  Load live exchange rates immediately.
 */
+
 loadExchangeRates();
 
 
 /*
-  Refresh every 15 minutes.
+  Refresh exchange rates every 15 minutes.
 */
+
 setInterval(
   loadExchangeRates,
   15 * 60 * 1000
@@ -1195,4 +1832,4 @@ setInterval(
 </script>
 
 </body>
-  </html>
+</html>
