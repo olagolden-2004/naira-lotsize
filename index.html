@@ -7,9 +7,7 @@
   <title>NairaLotSize — Naira Forex Lot Size Calculator</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -233,17 +231,9 @@
     }
 
     @media (max-width: 380px) {
-      body {
-        padding: 12px;
-      }
-
-      .card {
-        padding: 15px;
-      }
-
-      .lot-size {
-        font-size: 30px;
-      }
+      body { padding: 12px; }
+      .card { padding: 15px; }
+      .lot-size { font-size: 30px; }
     }
   </style>
 </head>
@@ -263,9 +253,7 @@
 
   <div class="card">
 
-    <label for="balance">
-      Account Balance (₦)
-    </label>
+    <label for="balance">Account Balance (₦)</label>
 
     <input
       id="balance"
@@ -277,9 +265,7 @@
     >
 
 
-    <label for="risk">
-      Risk Percentage (%)
-    </label>
+    <label for="risk">Risk Percentage (%)</label>
 
     <select id="risk">
       <option value="0.25">0.25%</option>
@@ -291,9 +277,7 @@
     </select>
 
 
-    <label for="minLot">
-      Broker Minimum Lot Size
-    </label>
+    <label for="minLot">Broker Minimum Lot Size</label>
 
     <select id="minLot">
       <option value="0.0001">0.0001</option>
@@ -305,9 +289,7 @@
     </select>
 
 
-    <label for="pair">
-      Currency Pair
-    </label>
+    <label for="pair">Currency Pair</label>
 
     <select id="pair">
       <option value="GBPUSD">GBP/USD</option>
@@ -323,9 +305,7 @@
     </select>
 
 
-    <label>
-      Direction
-    </label>
+    <label>Direction</label>
 
     <div class="direction">
 
@@ -347,9 +327,7 @@
     </div>
 
 
-    <label for="entry">
-      Entry Price
-    </label>
+    <label for="entry">Entry Price</label>
 
     <input
       id="entry"
@@ -360,9 +338,7 @@
     >
 
 
-    <label for="stop">
-      Stop Loss Price
-    </label>
+    <label for="stop">Stop Loss Price</label>
 
     <input
       id="stop"
@@ -373,9 +349,7 @@
     >
 
 
-    <label for="take">
-      Take Profit Price (Optional)
-    </label>
+    <label for="take">Take Profit Price (Optional)</label>
 
     <input
       id="take"
@@ -428,10 +402,7 @@
       </div>
 
 
-      <div
-        id="lots"
-        class="lot-size"
-      >
+      <div id="lots" class="lot-size">
         0.0000 lots
       </div>
 
@@ -508,19 +479,14 @@
 
 let direction = "buy";
 
-/*
-  No hardcoded USD/NGN rate is used.
-
-  If the live rate cannot be obtained, calculation is disabled.
-  This is safer for real-money position sizing.
-*/
 let usdNgn = null;
+
 let fxRates = null;
 
 
-/*
-  BUY / SELL buttons
-*/
+/* =========================
+   BUY / SELL
+========================= */
 
 const buyBtn =
   document.getElementById("buyBtn");
@@ -554,9 +520,9 @@ sellBtn.addEventListener("click", function () {
 });
 
 
-/*
-  Get live USD/NGN and other currency conversion rates.
-*/
+/* =========================
+   LIVE EXCHANGE RATES
+========================= */
 
 async function loadExchangeRates() {
 
@@ -579,6 +545,7 @@ async function loadExchangeRates() {
 
 
     if (!response.ok) {
+
       throw new Error(
         "Exchange rate request failed"
       );
@@ -645,15 +612,9 @@ async function loadExchangeRates() {
 }
 
 
-/*
-  Pip size.
-
-  JPY pairs:
-    0.01
-
-  Other listed forex pairs:
-    0.0001
-*/
+/* =========================
+   PIP SIZE
+========================= */
 
 function getPipSize(pair) {
 
@@ -670,16 +631,32 @@ function getPipSize(pair) {
 }
 
 
-/*
-  Calculate the USD value of one pip
-  for ONE standard lot.
+/* =========================
+   PIP VALUE IN USD
+=========================
 
-  Standard forex lot:
-    1.00 lot = 100,000 units
+   IMPORTANT:
+
+   For JPY pairs, the pip value is
+   converted using the ACTUAL TRADE
+   ENTRY PRICE.
+
+   Example USD/JPY:
+
+   50 pips
+   = 0.50 JPY
+
+   1 lot = 100,000 USD
+
+   0.50 × 100,000
+   = 50,000 JPY
+
+   50,000 ÷ entry price
+   = USD pip-distance value
 */
 
 
-function getPipValueUSD(pair) {
+function getPipValueUSD(pair, entry) {
 
   if (!fxRates) {
 
@@ -695,17 +672,16 @@ function getPipValueUSD(pair) {
     getPipSize(pair);
 
 
-  /*
-    GBP/USD
-    EUR/USD
-    AUD/USD
-    NZD/USD
+  /* =========================
+     USD QUOTE PAIRS
 
-    USD is the quote currency.
+     GBP/USD
+     EUR/USD
+     AUD/USD
+     NZD/USD
 
-    1 pip = 0.0001 × 100,000
-          = $10
-  */
+     1 pip = $10 per standard lot
+  ========================= */
 
   if (
     pair === "GBPUSD" ||
@@ -714,33 +690,30 @@ function getPipValueUSD(pair) {
     pair === "NZDUSD"
   ) {
 
-    return pip * standardLot;
+    return (
+      pip *
+      standardLot
+    );
   }
 
 
-  /*
-    USD/JPY
+  /* =========================
+     USD/JPY
 
-    1 pip = 0.01 × 100,000
-          = 1,000 JPY
+     USE ENTRY PRICE.
 
-    Convert JPY to USD:
-      1,000 / USDJPY
-  */
+     This is the important fix.
+  ========================= */
 
   if (pair === "USDJPY") {
 
-    const usdJpy =
-      Number(fxRates.JPY);
-
-
     if (
-      !Number.isFinite(usdJpy) ||
-      usdJpy <= 0
+      !Number.isFinite(entry) ||
+      entry <= 0
     ) {
 
       throw new Error(
-        "USD/JPY conversion rate unavailable."
+        "Invalid USD/JPY entry price."
       );
     }
 
@@ -748,24 +721,50 @@ function getPipValueUSD(pair) {
     return (
       pip *
       standardLot /
-      usdJpy
+      entry
     );
   }
 
 
-  /*
-    GBP/JPY
-    EUR/JPY
+  /* =========================
+     GBP/JPY
+     EUR/JPY
 
-    1 pip = 1,000 JPY
+     Pip value is in JPY.
 
-    Convert JPY to USD.
-  */
+     Convert JPY to USD using
+     the USD/JPY ENTRY PRICE.
+
+     This keeps the calculation
+     tied to the actual trade price.
+  ========================= */
 
   if (
     pair === "GBPJPY" ||
     pair === "EURJPY"
   ) {
+
+    if (
+      !Number.isFinite(entry) ||
+      entry <= 0
+    ) {
+
+      throw new Error(
+        "Invalid JPY-pair entry price."
+      );
+    }
+
+
+    const pipValueJPY =
+      pip *
+      standardLot;
+
+
+    /*
+      fxRates.JPY means:
+
+      1 USD = X JPY
+    */
 
     const usdJpy =
       Number(fxRates.JPY);
@@ -782,31 +781,38 @@ function getPipValueUSD(pair) {
     }
 
 
+    /*
+      Convert JPY pip value to USD.
+
+      For JPY crosses, using the
+      actual USD/JPY rate is the
+      appropriate USD conversion.
+    */
+
     return (
-      pip *
-      standardLot /
+      pipValueJPY /
       usdJpy
     );
   }
 
 
-  /*
-    EUR/GBP
+  /* =========================
+     EUR/GBP
 
-    1 pip = 10 GBP.
+     1 pip = 10 GBP.
 
-    The API gives:
+     API:
 
-      1 USD = X GBP
+       1 USD = X GBP
 
-    Therefore:
+     Therefore:
 
-      1 GBP = 1 / X USD
+       1 GBP = 1 / X USD
 
-    So:
+     So:
 
-      10 GBP = 10 / X USD
-  */
+       10 GBP = 10 / X USD
+  ========================= */
 
   if (pair === "EURGBP") {
 
@@ -833,14 +839,13 @@ function getPipValueUSD(pair) {
   }
 
 
-  /*
-    USD/CAD
+  /* =========================
+     USD/CAD
 
-    1 pip = 10 CAD.
+     1 pip = 10 CAD.
 
-    Convert CAD to USD:
-      10 / USDCAD
-  */
+     Convert CAD to USD.
+  ========================= */
 
   if (pair === "USDCAD") {
 
@@ -867,14 +872,13 @@ function getPipValueUSD(pair) {
   }
 
 
-  /*
-    USD/CHF
+  /* =========================
+     USD/CHF
 
-    1 pip = 10 CHF.
+     1 pip = 10 CHF.
 
-    Convert CHF to USD:
-      10 / USDCHF
-  */
+     Convert CHF to USD.
+  ========================= */
 
   if (pair === "USDCHF") {
 
@@ -907,9 +911,9 @@ function getPipValueUSD(pair) {
 }
 
 
-/*
-  Format Naira.
-*/
+/* =========================
+   NAIRA FORMAT
+========================= */
 
 function formatNaira(value) {
 
@@ -926,11 +930,9 @@ function formatNaira(value) {
 }
 
 
-/*
-  Format lots.
-
-  Always show four decimal places.
-*/
+/* =========================
+   LOT FORMAT
+========================= */
 
 function formatLots(value) {
 
@@ -938,9 +940,9 @@ function formatLots(value) {
 }
 
 
-/*
-  Show error.
-*/
+/* =========================
+   ERROR
+========================= */
 
 function showError(message) {
 
@@ -955,10 +957,6 @@ function showError(message) {
 }
 
 
-/*
-  Clear error.
-*/
-
 function clearError() {
 
   const error =
@@ -971,9 +969,9 @@ function clearError() {
 }
 
 
-/*
-  Show warning.
-*/
+/* =========================
+   WARNING
+========================= */
 
 function showWarning(message) {
 
@@ -988,10 +986,6 @@ function showWarning(message) {
 }
 
 
-/*
-  Clear warning.
-*/
-
 function clearWarning() {
 
   const warning =
@@ -1004,9 +998,9 @@ function clearWarning() {
 }
 
 
-/*
-  Count decimal places.
-*/
+/* =========================
+   DECIMAL PLACES
+========================= */
 
 function decimalPlaces(value) {
 
@@ -1028,28 +1022,24 @@ function decimalPlaces(value) {
 }
 
 
-/*
-  IMPORTANT LOT-SIZE FUNCTION
+/* =========================
+   ROUND DOWN TO LOT STEP
+=========================
 
-  The selected Broker Minimum Lot Size is
-  treated as the broker's allowed lot step.
+   0.0113 with 0.01
+   => 0.0100
 
-  Examples:
+   0.0168 with 0.01
+   => 0.0100
 
-    0.0113 with 0.01
-      => 0.0100
+   0.0218 with 0.01
+   => 0.0200
 
-    0.0168 with 0.01
-      => 0.0100
+   0.0064 with 0.001
+   => 0.0060
 
-    0.0218 with 0.01
-      => 0.0200
-
-    0.0064 with 0.001
-      => 0.0060
-
-    0.0064 with 0.0001
-      => 0.0064
+   0.0064 with 0.0001
+   => 0.0064
 */
 
 function roundDownToLotStep(
@@ -1085,14 +1075,16 @@ function roundDownToLotStep(
 
   const valueInteger =
     Math.floor(
-      value * multiplier +
+      value *
+      multiplier +
       Number.EPSILON
     );
 
 
   const stepInteger =
     Math.round(
-      step * multiplier
+      step *
+      multiplier
     );
 
 
@@ -1103,7 +1095,8 @@ function roundDownToLotStep(
 
   const roundedInteger =
     Math.floor(
-      valueInteger / stepInteger
+      valueInteger /
+      stepInteger
     ) *
     stepInteger;
 
@@ -1115,9 +1108,9 @@ function roundDownToLotStep(
 }
 
 
-/*
-  Main calculation.
-*/
+/* =========================
+   MAIN CALCULATION
+========================= */
 
 function calculate() {
 
@@ -1127,7 +1120,8 @@ function calculate() {
 
 
   /*
-    A live USD/NGN rate is required.
+    Never calculate with a stale
+    or invented exchange rate.
   */
 
   if (
@@ -1203,9 +1197,9 @@ function calculate() {
       : Number(takeInput);
 
 
-  /*
-    Validate balance.
-  */
+  /* =========================
+     VALIDATION
+  ========================= */
 
   if (
     !Number.isFinite(balance) ||
@@ -1220,10 +1214,6 @@ function calculate() {
   }
 
 
-  /*
-    Validate risk.
-  */
-
   if (
     !Number.isFinite(riskPercent) ||
     riskPercent <= 0
@@ -1236,10 +1226,6 @@ function calculate() {
     return;
   }
 
-
-  /*
-    Validate broker minimum.
-  */
 
   if (
     !Number.isFinite(minLot) ||
@@ -1254,10 +1240,6 @@ function calculate() {
   }
 
 
-  /*
-    Validate entry.
-  */
-
   if (
     !Number.isFinite(entry) ||
     entry <= 0
@@ -1270,10 +1252,6 @@ function calculate() {
     return;
   }
 
-
-  /*
-    Validate stop.
-  */
 
   if (
     !Number.isFinite(stop) ||
@@ -1288,10 +1266,6 @@ function calculate() {
   }
 
 
-  /*
-    Entry and stop cannot be identical.
-  */
-
   if (entry === stop) {
 
     showError(
@@ -1302,10 +1276,9 @@ function calculate() {
   }
 
 
-  /*
-    BUY:
-    Stop must be below entry.
-  */
+  /* =========================
+     BUY STOP VALIDATION
+  ========================= */
 
   if (
     direction === "buy" &&
@@ -1320,10 +1293,9 @@ function calculate() {
   }
 
 
-  /*
-    SELL:
-    Stop must be above entry.
-  */
+  /* =========================
+     SELL STOP VALIDATION
+  ========================= */
 
   if (
     direction === "sell" &&
@@ -1338,9 +1310,9 @@ function calculate() {
   }
 
 
-  /*
-    Validate Take Profit.
-  */
+  /* =========================
+     TAKE PROFIT VALIDATION
+  ========================= */
 
   if (take !== null) {
 
@@ -1357,11 +1329,6 @@ function calculate() {
     }
 
 
-    /*
-      BUY:
-      TP must be above entry.
-    */
-
     if (
       direction === "buy" &&
       take <= entry
@@ -1374,11 +1341,6 @@ function calculate() {
       return;
     }
 
-
-    /*
-      SELL:
-      TP must be below entry.
-    */
 
     if (
       direction === "sell" &&
@@ -1394,26 +1356,26 @@ function calculate() {
   }
 
 
-  /*
-    Planned monetary risk.
-  */
+  /* =========================
+     RISK AMOUNT
+  ========================= */
 
   const riskAmount =
     balance *
     (riskPercent / 100);
 
 
-  /*
-    Pip size.
-  */
+  /* =========================
+     PIP SIZE
+  ========================= */
 
   const pip =
     getPipSize(pair);
 
 
-  /*
-    Stop distance.
-  */
+  /* =========================
+     STOP DISTANCE
+  ========================= */
 
   const stopDistancePrice =
     Math.abs(
@@ -1421,12 +1383,9 @@ function calculate() {
     );
 
 
-  /*
-    Stop distance in pips.
-  */
-
   const stopLossPips =
-    stopDistancePrice / pip;
+    stopDistancePrice /
+    pip;
 
 
   if (
@@ -1442,9 +1401,9 @@ function calculate() {
   }
 
 
-  /*
-    Pip value in USD.
-  */
+  /* =========================
+     PIP VALUE
+  ========================= */
 
   let pipValueUSD;
 
@@ -1452,7 +1411,10 @@ function calculate() {
   try {
 
     pipValueUSD =
-      getPipValueUSD(pair);
+      getPipValueUSD(
+        pair,
+        entry
+      );
 
   } catch (error) {
 
@@ -1465,18 +1427,18 @@ function calculate() {
   }
 
 
-  /*
-    Convert USD pip value to Naira.
-  */
+  /* =========================
+     PIP VALUE IN NAIRA
+  ========================= */
 
   const pipValueNaira =
     pipValueUSD *
     usdNgn;
 
 
-  /*
-    Risk for ONE standard lot.
-  */
+  /* =========================
+     RISK PER 1 STANDARD LOT
+  ========================= */
 
   const riskPerOneLot =
     stopLossPips *
@@ -1496,12 +1458,9 @@ function calculate() {
   }
 
 
-  /*
-    EXACT mathematical lot size.
-
-    This is the theoretical position size
-    needed to risk exactly the selected amount.
-  */
+  /* =========================
+     EXACT LOT SIZE
+  ========================= */
 
   const rawLots =
     riskAmount /
@@ -1521,18 +1480,16 @@ function calculate() {
   }
 
 
-  /*
-    RECOMMENDED LOT SIZE
+  /* =========================
+     RECOMMENDED LOT
+  =========================
 
-    If the exact lot is below the broker minimum,
-    the minimum is the only possible position.
+     If raw lot is below the broker
+     minimum, the minimum is shown.
 
-    Otherwise round DOWN to the broker's
-    selected lot step.
-
-    This prevents rounding UP and accidentally
-    increasing the intended risk.
-  */
+     Otherwise round DOWN to the
+     broker's selected lot step.
+  ========================= */
 
   let recommendedLots;
 
@@ -1551,10 +1508,6 @@ function calculate() {
       );
 
 
-    /*
-      Safety check.
-    */
-
     if (
       recommendedLots < minLot
     ) {
@@ -1565,10 +1518,9 @@ function calculate() {
   }
 
 
-  /*
-    Standard forex:
-      1.00 lot = 100,000 units
-  */
+  /* =========================
+     UNITS
+  ========================= */
 
   const units =
     Math.round(
@@ -1577,19 +1529,18 @@ function calculate() {
     );
 
 
-  /*
-    Actual loss at the RECOMMENDED
-    position size.
-  */
+  /* =========================
+     ACTUAL POTENTIAL LOSS
+  ========================= */
 
   const actualPotentialLoss =
     recommendedLots *
     riskPerOneLot;
 
 
-  /*
-    Potential profit.
-  */
+  /* =========================
+     TAKE PROFIT
+  ========================= */
 
   let potentialProfit = null;
 
@@ -1605,21 +1556,14 @@ function calculate() {
 
 
     const rewardPips =
-      rewardDistance / pip;
+      rewardDistance /
+      pip;
 
-
-    /*
-      Risk : Reward
-    */
 
     rr =
       rewardPips /
       stopLossPips;
 
-
-    /*
-      Profit at recommended lot.
-    */
 
     potentialProfit =
       rewardPips *
@@ -1628,20 +1572,13 @@ function calculate() {
   }
 
 
-  /*
-    WARNING #1:
-    Exact lot below broker minimum.
+  /* =========================
+     MINIMUM-LOT WARNING
+  ========================= */
 
-    Example:
-
-      Exact = 0.0001
-      Minimum = 0.0100
-
-    The broker minimum is much larger,
-    so actual risk will be much higher.
-  */
-
-  if (recommendedLots > rawLots) {
+  if (
+    recommendedLots > rawLots
+  ) {
 
     const excessPercent =
       (
@@ -1660,24 +1597,25 @@ function calculate() {
       " lots, which is below your broker minimum of " +
       formatLots(minLot) +
       " lots. " +
-      "The calculator therefore recommends the minimum " +
+      "The calculator therefore uses the minimum lot, " +
       formatLots(minLot) +
-      " lots, but that would risk approximately " +
+      " lots. " +
+      "This would risk approximately " +
       formatNaira(actualPotentialLoss) +
       " instead of your planned " +
       formatNaira(riskAmount) +
       " (" +
       excessPercent.toFixed(1) +
       "% more risk). " +
-      "To stay within your planned risk, use a broker that " +
-      "allows a smaller lot size."
+      "To stay within your planned risk, use a broker " +
+      "that allows a smaller lot size."
     );
   }
 
 
-  /*
-    Display exact mathematical lot.
-  */
+  /* =========================
+     DISPLAY RESULTS
+  ========================= */
 
   document.getElementById(
     "actualLots"
@@ -1686,10 +1624,6 @@ function calculate() {
     " lots";
 
 
-  /*
-    Display broker-valid recommended lot.
-  */
-
   document.getElementById(
     "lots"
   ).textContent =
@@ -1697,19 +1631,11 @@ function calculate() {
     " lots";
 
 
-  /*
-    Planned risk amount.
-  */
-
   document.getElementById(
     "riskAmount"
   ).textContent =
     formatNaira(riskAmount);
 
-
-  /*
-    Stop loss distance.
-  */
 
   document.getElementById(
     "stopDistance"
@@ -1717,10 +1643,6 @@ function calculate() {
     stopLossPips.toFixed(1) +
     " pips";
 
-
-  /*
-    Units of the recommended position.
-  */
 
   document.getElementById(
     "units"
@@ -1730,10 +1652,6 @@ function calculate() {
     );
 
 
-  /*
-    Potential loss at recommended lot.
-  */
-
   document.getElementById(
     "potentialLoss"
   ).textContent =
@@ -1741,10 +1659,6 @@ function calculate() {
       actualPotentialLoss
     );
 
-
-  /*
-    Potential profit at recommended lot.
-  */
 
   document.getElementById(
     "potentialProfit"
@@ -1756,10 +1670,6 @@ function calculate() {
         );
 
 
-  /*
-    Risk : Reward.
-  */
-
   document.getElementById(
     "rr"
   ).textContent =
@@ -1769,10 +1679,6 @@ function calculate() {
         rr.toFixed(2);
 
 
-  /*
-    Broker minimum.
-  */
-
   document.getElementById(
     "minimumUsed"
   ).textContent =
@@ -1780,19 +1686,11 @@ function calculate() {
     " lots";
 
 
-  /*
-    USD/NGN rate.
-  */
-
   document.getElementById(
     "rateUsed"
   ).textContent =
     formatNaira(usdNgn);
 
-
-  /*
-    Show results.
-  */
 
   document.getElementById(
     "result"
@@ -1801,9 +1699,9 @@ function calculate() {
 }
 
 
-/*
-  Calculate button.
-*/
+/* =========================
+   CALCULATE BUTTON
+========================= */
 
 document
   .getElementById("calculateBtn")
@@ -1813,16 +1711,16 @@ document
   );
 
 
-/*
-  Load live exchange rates immediately.
-*/
+/* =========================
+   LOAD RATE
+========================= */
 
 loadExchangeRates();
 
 
-/*
-  Refresh exchange rates every 15 minutes.
-*/
+/* =========================
+   REFRESH EVERY 15 MINUTES
+========================= */
 
 setInterval(
   loadExchangeRates,
@@ -1832,4 +1730,4 @@ setInterval(
 </script>
 
 </body>
-</html>
+  </html>
